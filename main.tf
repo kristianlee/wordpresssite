@@ -1,16 +1,11 @@
-provider "aws" {
-  access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
-  region = "${var.region}"
-}
-resource "aws_instance" "example" {
-  ami = "ami-f1d7c395"
-  instance_type = "t2.micro"
 
-  provisioner "local-exec" {
-    command = "echo ${aws_instance.example.public_ip} > ip_address.txt"
+resource "aws_vpc" "tools" {
+  cidr_block  = "10.0.0.0/16"
+  
+  tags {
+    Name = "tools"
+  }
 }
-}
-resource "aws_eip" "ip" {
-  instance = "${aws_instance.example.id}"
-}
+
+#resource "aws_subnet" "primary" {
+#  vpc_id  = 
