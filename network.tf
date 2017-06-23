@@ -73,9 +73,9 @@ resource "aws_route_table" "eu-west-2a-public" {
 #nat instance
 
 resource "aws_instance" "nat" {
-  ami = "ami-30913f47"
+  ami = "ami-0a4c5a6e"
   availability_zone = "eu-west-2a"
-  instance_type = "m1.small"
+  instance_type = "t2.nano"
   key_name = "${var.aws_key_name}"
   vpc_security_group_ids = ["${aws_security_group.nat.id}"]
   subnet_id = "${aws_subnet.eu-west-2a-public.id}"
