@@ -70,6 +70,11 @@ resource "aws_route_table" "eu-west-2a-public" {
   }
 }
 
+resource "aws_route_table_association" "eu-west-2a-public" {
+  subnet_id = "${aws_subnet.eu-west-2a-public.id}"
+  route_table_id = "${aws_route_table.eu-west-2a-public.id}"
+}
+
 #nat instance
 
 resource "aws_instance" "nat" {

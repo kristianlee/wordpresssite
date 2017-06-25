@@ -8,7 +8,7 @@ resource "aws_instance" "mysql1" {
     }
 
     provisioner "local-exec" {
-      command = "sleep 30 && echo -e \"[mysqlprimary]\n${aws_instance.mysql1.public_ip} ansible_connection=ssh ansible_ssh_user=ubuntu\" > inventory"
+      command = "sleep 30 && echo \"[mysqlprimary]\n${aws_instance.mysql1.private_ip} ansible_connection=ssh ansible_ssh_user=ubuntu\" >> ansible/inventory"
     }
 
 }

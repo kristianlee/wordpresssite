@@ -25,11 +25,32 @@ resource "aws_security_group" "wordpress" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["${var.home_cidr}"]
+   }
+
   egress { #MySQL
     from_port = 3306
     to_port = 3306
     protocol = "tcp"
     cidr_blocks = ["${var.private1_subnet_cidr}"]
+  }
+
+  egress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   vpc_id = "${aws_vpc.tools.id}"
@@ -54,14 +75,15 @@ resource "aws_instance" "wp-1" {
     Name = "Wordpress 1"
   }
 
-  provisioner "local-exec" {
-    command = "sleep 30 && echo -e \"[wordpress]\n${aws_instance.wp-1.public_ip} ansible_connection=ssh ansible_ssh_user=ubuntu\" >> inventory"
-  }
+
 
 }
 
 resource "aws_eip" "wp1" {
   instance = "${aws_instance.wp-1.id}"
   vpc = true
+  
+  provisioner "local-exec" {
+    command = "sleep 30 && /bin/echo \"[wordpress]\n${aws_eip.wp1.public_ip} \" >> ansible/inventory"
+  }
 }
-
